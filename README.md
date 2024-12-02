@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+Execution failed for task ':path_provider_android:compileDebugJavaWithJavac'.
+https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812
