@@ -22,12 +22,12 @@ class _MyAppState extends State<MyApp> {
 
     // 监听状态变化
     player.onPlayerComplete.listen((event) {
-      _playerState = PlayerState.stopped;
+      setState(() => _playerState = PlayerState.stopped);
     });
 
     // 监听状态变化
     player.onPlayerStateChanged.listen((state) {
-      _playerState = state;
+      setState(() => _playerState = state);
     });
   }
 
@@ -42,20 +42,21 @@ class _MyAppState extends State<MyApp> {
 //  如果音频已经暂停，resume() 会从暂停的位置继续播放。
 //  •	如果音频已经在播放或者停止状态，调用 resume() 可能不会有任何效果，或者会抛出异
   Future<void> _play() async {
-    // await player.resume();
     await player.resume();
-    _playerState = PlayerState.playing;
+    setState(() => _playerState = PlayerState.playing);
   }
 
   Future<void> _pause() async {
     await player.pause();
-    _playerState = PlayerState.paused;
+    setState(() => _playerState = PlayerState.paused);
   }
 
   Future<void> _stop() async {
     await player.stop();
-    _playerState = PlayerState.stopped;
-    _position = Duration.zero;
+    setState(() {
+      _playerState = PlayerState.stopped;
+      _position = Duration.zero;
+    });
   }
 
   @override
@@ -63,10 +64,10 @@ class _MyAppState extends State<MyApp> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     const String appTitle = 'IMusic';
-    // 使用空值安全操作符防止 _playerState 为 null 时出现错误
-    String playerStateText = _playerState?.toString().split('.').last ?? '未知状态';
+    String playIcon = _playerState == PlayerState.stopped || _playerState == PlayerState.paused ? 'assets/img/player-play.svg':'assets/img/player-pause.svg';
+    print('------------');
+    print(playIcon);
     return MaterialApp(
-      // 风格类型的根组件
       title: appTitle,
       home: Scaffold(
           appBar: AppBar(
@@ -121,6 +122,8 @@ class _MyAppState extends State<MyApp> {
                     GestureDetector(
                         onTap: () async {
                           print('点击时事件了');
+                          print(_playerState);
+
                           // 处理点击事件
 
                           if (_playerState == PlayerState.stopped) {
@@ -132,19 +135,19 @@ class _MyAppState extends State<MyApp> {
                               await _init();
                             }
                             print('播放了1');
-                            _play();
+                            await _play();
                           } else if (_playerState == PlayerState.paused) {
                             print('播放了2');
-                            _play();
+                            await _play();
                           } else if (_playerState == PlayerState.playing) {
-                            _pause();
+                            await _pause();
                             print('暂停了');
                           }else{
                             print('点击时事件了，但是都没匹配');
                           }
                         },
                         child: SvgPicture.asset(
-                          _playerState == PlayerState.stopped ? 'assets/img/player-play.svg':'assets/img/player-pause.svg' ,
+                          playIcon,
                           semanticsLabel: 'Dart Logo',
                           width: 40,
                           height: 40,
