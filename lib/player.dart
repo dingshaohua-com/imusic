@@ -1,38 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:intl/intl.dart';
 
 // 根组件（root widget）
-class MyApp extends StatefulWidget {
+class MyPlayer extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyPlayer> {
   AudioPlayer player = AudioPlayer();
   PlayerState? _playerState;
-  Duration? _position;
+  Duration _duration = const Duration(minutes: 0, seconds: 0); // 总时长
+  Duration _position = const Duration(minutes: 0, seconds: 0); // 当前进度
 
   // 生命周期函数，用于初始化状态，如果有需要可以写，非必须如初始化数据、设置监听器、调用异步操作等
   @override
   void initState() {
     super.initState();
 
+    // 从 player 中对变量初始化
     _playerState = player.state;
+    player.getDuration().then(
+          (value) => setState(() {
+            _duration = value!;
+          }),
+        );
+    player.getCurrentPosition().then(
+          (value) => setState(() {
+            _position = value!;
+          }),
+        );
 
-    // 监听状态变化
-    player.onPlayerComplete.listen((event) {
-      setState(() => _playerState = PlayerState.stopped);
+    // ---监听状态变化 _initStreams start---
+    player.onDurationChanged.listen((duration) {
+      setState(() => _duration = duration);
     });
-
-    // 监听状态变化
+    player.onPositionChanged.listen(
+      (p) => setState(() => _position = p),
+    );
+    player.onPlayerComplete.listen((event) {
+      setState(() {
+        _playerState = PlayerState.stopped;
+        _position = Duration.zero;
+      });
+    });
     player.onPlayerStateChanged.listen((state) {
       setState(() => _playerState = state);
     });
+    // ---监听状态变化 _initStreams end---
   }
 
   // 点击播放相关按钮
-
   Future<void> _init(
       {String url = 'https://file.dingshaohua.com/qlx.mp3'}) async {
     await player.setSource(UrlSource(url));
@@ -62,11 +82,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     const String appTitle = 'IMusic';
-    String playIcon = _playerState == PlayerState.stopped || _playerState == PlayerState.paused ? 'assets/img/player-play.svg':'assets/img/player-pause.svg';
-    print('------------');
-    print(playIcon);
+    String playIcon = _playerState == PlayerState.stopped ||
+            _playerState == PlayerState.paused
+        ? 'assets/img/player-play.svg'
+        : 'assets/img/player-pause.svg';
+    String positionTemp = DateFormat("mm:ss").format(DateTime(0).add(_position));
+    String durationTemp = DateFormat("mm:ss").format(DateTime(0).add(_duration));
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
@@ -78,31 +100,31 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.start, // 让子组件从顶部开始排列
             children: [
               Container(
-                  margin: const EdgeInsets.only(top: 150), // 在四个方向上添加 20 的外部间距
+                  margin: const EdgeInsets.only(top: 100), // 在四个方向上添加 20 的外部间距
                   child: Align(
                       alignment: Alignment.center,
                       child: Image.asset(
                         'assets/img/defaut-music.jpg',
-                        width: 200, // 设置图片的宽度
-                        height: 200, // 设置图片的高度
+                        width: 220, // 设置图片的宽度
+                        height: 220, // 设置图片的高度
                       ))),
               Container(
                   margin: const EdgeInsets.only(top: 10),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Text('歌手: '), Text('周杰伦')],
+                    children: [const Text('歌手: '), const Text('周杰伦'), const SizedBox(width: 10), const Text('|'), const SizedBox(width: 10), Text('$positionTemp / $durationTemp')],
                   )),
               Container(
                   margin: const EdgeInsets.only(top: 2),
-                  child: Text(
-                    '七里香: $_playerState',
+                  child: const Text(
+                    '七里香',
                     style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,
                     ),
                   )),
               Container(
-                  margin: const EdgeInsets.only(top: 160),
+                  margin: const EdgeInsets.only(top: 60),
                   width: screenWidth * 0.8,
                   height: 2,
                   color: Colors.grey[200]),
@@ -121,16 +143,9 @@ class _MyAppState extends State<MyApp> {
                     SizedBox(width: 60),
                     GestureDetector(
                         onTap: () async {
-                          print('点击时事件了');
-                          print(_playerState);
-
                           // 处理点击事件
-
                           if (_playerState == PlayerState.stopped) {
-                            // player.play(UrlSource(musicPath));
-                            print('------------');
-
-                            if (player.source==null) {
+                            if (player.source == null) {
                               print('初始化了');
                               await _init();
                             }
@@ -142,7 +157,7 @@ class _MyAppState extends State<MyApp> {
                           } else if (_playerState == PlayerState.playing) {
                             await _pause();
                             print('暂停了');
-                          }else{
+                          } else {
                             print('点击时事件了，但是都没匹配');
                           }
                         },
