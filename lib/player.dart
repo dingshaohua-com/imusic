@@ -94,7 +94,7 @@ class _MyAppState extends State<MyPlayer> {
       home: Scaffold(
           appBar: AppBar(
             title: const Text(appTitle),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start, // 让子组件从顶部开始排列

@@ -34,9 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Example'),
-      ),
       body: _pages[_currentIndex],  // 显示当前选中的页面
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,  // 当前选中的索引
@@ -48,18 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: '列表',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: '播放器',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            label: 'Profile',
+            label: '我的',
           ),
         ],
       ),
     );
   }
 }
+
+// MyList 是根组件（StatelessWidget），负责将 MaterialApp 和 HomeScreen 连接起来。
+// HomeScreen 是实际的页面（StatefulWidget），用于展示实际内容并管理状态。
+// _HomeScreenState 是 HomeScreen 的状态类，负责执行页面逻辑、构建 UI 等。
