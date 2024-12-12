@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,6 @@ class _MyListState extends State<MyList> {
         'topid': hotTopid,
         'period': hotPeriod
       });
-
-      print(res1.data['data']['list']);
       setState(() {
         _topGroup = res1.data['data']['list'];
       });
@@ -67,7 +66,13 @@ class _MyListState extends State<MyList> {
               title: Text(item['title']), // 显示 name 字段
               subtitle: Text(item['author']),
               onTap: () {
-                eventBus.fire(MusicEvent('哈哈'));
+                // Map map = new HashMap();
+                // map['type'] = 'play';
+                // map['params'] = item;
+                Map<String, dynamic> map = {};
+                map['type'] = 'play';
+                map['params'] = item;
+                eventBus.fire(MusicEvent(map));
               },
             );
           },

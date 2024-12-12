@@ -31,18 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
     const Center(child: Me()),
   ];
 
-  // 悬浮球的初始位置
-  Offset _floatingBallOffset = Offset(300, 300);
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           _pages[_currentIndex],  // 显示当前选中的页面
-          FloatingBall(offset: _floatingBallOffset), // 悬浮球
+          FloatingBall(), // 悬浮球
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
