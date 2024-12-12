@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imusic/player.dart';
+import 'package:imusic/me.dart';
 import 'list.dart';
+import 'package:imusic/float_ball.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -27,14 +28,23 @@ class _HomeScreenState extends State<HomeScreen> {
   // 每个 tab 对应的内容
   final List<Widget> _pages = [
     const Center(child: MyList()),
-    Center(child: MyPlayer()),
-    const Center(child: Text('Profile Page')),
+    const Center(child: Me()),
   ];
+
+  // 悬浮球的初始位置
+  Offset _floatingBallOffset = Offset(300, 300);
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex],  // 显示当前选中的页面
+      body: Stack(
+        children: [
+          _pages[_currentIndex],  // 显示当前选中的页面
+          FloatingBall(offset: _floatingBallOffset), // 悬浮球
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,  // 当前选中的索引
         onTap: (index) {
@@ -47,10 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.home),
             label: '列表',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '播放器',
-          ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: '我的',
