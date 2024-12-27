@@ -7,7 +7,13 @@ EventBus eventBus = EventBus();
 //   late String url;
 // }
 
-class MusicEvent {
+class PlayEvent {
   final Map<String, dynamic> data;
-  MusicEvent(this.data);
+  PlayEvent(this.data);
+}
+
+
+class CustomEvent {
+  final Map<String, dynamic> data;
+  CustomEvent(this.data);
 }
