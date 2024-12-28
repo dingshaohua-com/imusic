@@ -3,6 +3,7 @@ import 'package:imusic/pages/home.dart';
 import 'package:imusic/pages/about.dart';
 import 'package:imusic/components/player.dart';
 import 'package:imusic/components/player_ball.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /*
 * 定义标签栏和标签页
@@ -26,7 +27,7 @@ void main() {
   Player player = Player.getInstance();
   player.subscribe();
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 /*
@@ -50,15 +51,13 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-          appBar: AppBar(),
-          body: Stack(
-              children: [
-                _widgetOptions.elementAt(currentIndex),
-                const PlayerBall(),
-              ]
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-              currentIndex: currentIndex, onTap: onTap, items: _barItems),
-        ));
+      appBar: AppBar(),
+      body: Stack(children: [
+        _widgetOptions.elementAt(currentIndex),
+        const PlayerBall(),
+      ]),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex, onTap: onTap, items: _barItems),
+    ));
   }
 }
