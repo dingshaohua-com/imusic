@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imusic/pages/home.dart';
 import 'package:imusic/pages/about.dart';
-import 'package:imusic/components/player.dart';
 import 'package:imusic/components/player_ball.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,9 +23,6 @@ const _barItems = <BottomNavigationBarItem>[
 * 入口函数
 * */
 void main() {
-  Player player = Player.getInstance();
-  player.subscribe();
-
   runApp(const ProviderScope(child: MyApp()));
 }
 

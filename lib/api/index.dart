@@ -34,12 +34,12 @@ getHotMusic() async {
   return res.data['data']['list'];
 }
 
-getMusicUrl(String mid)  {
+getMusic(String mid) async {
   var params = {'key': 'WzwNdjdg5kUuqM2A0z7', 'mid': mid, 'type': 'url', 'cookie':cookie};
-  // final res = await dio.get(yaohudOrgin, queryParameters: params);
-  // 将 queryParams 拼接到 baseUrl 后面
-  String musicUrl = Uri.parse(yaohudOrgin).replace(queryParameters: params).toString();
-  return musicUrl;
+  var songParams = {'key': 'WzwNdjdg5kUuqM2A0z7', 'mid': mid, 'type': 'song', 'cookie':cookie};;
+  final res = await dio.get(yaohudOrgin, queryParameters: songParams);
+  res.data['data']['musicUrl'] = Uri.parse(yaohudOrgin).replace(queryParameters: params).toString();
+  return res.data['data'];
 }
 
 
