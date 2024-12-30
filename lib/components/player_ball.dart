@@ -1,24 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:imusic/store/index.dart';
-import 'package:imusic/utils/player.dart';
+import 'package:imusic/model/player_state_notifier.dart';
 import 'package:marquee/marquee.dart';
 
-Player player = Player.getInstance();
+import '../model/player_state.dart';
+
 
 class PlayerBall extends ConsumerWidget {
   const PlayerBall({super.key});
 
+  onTapPlay(ref) {
+    PlayerState playerState = ref.read(playerStateProvider.notifier).state;
+    PlayerStateNotifier playerStateNotifier = ref.read(playerStateProvider.notifier);
+
+    if(playerState.status == 'playing'){
+      playerStateNotifier.pause();
+    }else{
+      playerStateNotifier.playOrResume(playerState.songId);
+    }
+
+    // PlayerState playerState = ref.watch(playerProvider);
+    // if (playerState.status == 'playing') {
+    //   // player.play(playerState.song.url);
+    //   ref.read(playerProvider.notifier).state = playerState.copyWith(
+    //       status: 'stop'
+    //   );
+    //
+    // }else{
+    //
+    // }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerState = ref.watch(playerProvider);
+    final playerState = ref.watch(playerStateProvider);
 
-    print(playerState);
 
-    if (playerState.status == 'playing') {
-      player.play(playerState.song.url);
-    }
+
+
+    // if (playerState.status == 'playing') {
+    //   player.play(playerState.song.url);
+    // }
 
     String playIcon = playerState.status == 'stop'
         ? 'assets/img/player-play.svg'
@@ -33,7 +56,8 @@ class PlayerBall extends ConsumerWidget {
                 width: 180,
                 decoration: BoxDecoration(
                   border: Border.all(width: 0, color: Colors.deepOrangeAccent),
-                  color: Colors.deepOrangeAccent, // Background color of the container
+                  color: Colors
+                      .deepOrangeAccent, // Background color of the container
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30), // 左上角圆角
                     topRight: Radius.circular(30), // 右上角圆角
@@ -46,10 +70,11 @@ class PlayerBall extends ConsumerWidget {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-
-                      playerState.song.pic.isEmpty
-                          ? SvgPicture.asset('assets/img/music.svg', width: 30, height: 30)
-                          : Image.network(playerState.song.pic, width: 30, height: 30),
+                      playerState.coverUrl.isEmpty
+                          ? SvgPicture.asset('assets/img/music.svg',
+                              width: 30, height: 30)
+                          : Image.network(playerState.coverUrl,
+                              width: 30, height: 30),
 
                       Container(
                         margin: const EdgeInsets.only(left: 18), // 设置外边距
@@ -57,8 +82,9 @@ class PlayerBall extends ConsumerWidget {
                         height: 30,
 
                         child: Marquee(
-                          text: playerState.song.name,
-                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                          text: playerState.songName,
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
                           blankSpace: 20, // 跑马灯前后留白
                           velocity: 10, // 滚动速度
                           pauseAfterRound: const Duration(seconds: 2), // 滚动停止时间
@@ -71,34 +97,36 @@ class PlayerBall extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20, vertical: 10), // 水平方向20、垂直方向10的内边距
                 decoration: const BoxDecoration(
-                  color: Colors.blue, // Background color of the container
+                  color: Color.fromARGB(
+                      255, 122, 133, 75), // Background color of the container
                   borderRadius: BorderRadius.all(Radius.circular(
                       30)), // Round all corners with a radius of 16
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SvgPicture.asset(
-                      "assets/img/player-skip-back.svg",
-                      semanticsLabel: 'Dart Logo',
-                      width: 25,
-                      height: 25,
-                        colorFilter: const ColorFilter.mode(Colors.white,BlendMode.srcIn )
-                    ),
-                    SvgPicture.asset(
-                      playIcon,
-                      semanticsLabel: 'Dart Logo',
-                      width: 25,
-                      height: 25,
-                        colorFilter: const ColorFilter.mode(Colors.white,BlendMode.srcIn )
-                    ),
-                    SvgPicture.asset(
-                      "assets/img/player-skip-forward.svg",
-                      semanticsLabel: 'Dart Logo',
-                      width: 25,
-                      height: 25,
-                      colorFilter: const ColorFilter.mode(Colors.white,BlendMode.srcIn )
-                    ),
+                    SvgPicture.asset("assets/img/player-skip-back.svg",
+                        semanticsLabel: 'Dart Logo',
+                        width: 25,
+                        height: 25,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.white, BlendMode.srcIn)),
+                    InkWell(
+                        onTap: (){onTapPlay(ref);},
+                        child: SvgPicture.asset(
+                          playIcon,
+                          semanticsLabel: 'Dart Logo',
+                          width: 25,
+                          height: 25,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn),
+                        )),
+                    SvgPicture.asset("assets/img/player-skip-forward.svg",
+                        semanticsLabel: 'Dart Logo',
+                        width: 25,
+                        height: 25,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.white, BlendMode.srcIn)),
                   ],
                 )),
           ]),

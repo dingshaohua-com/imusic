@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imusic/api/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:imusic/store/index.dart';
-
-import '../model/player_state.dart';
+import '../model/player_state_notifier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  // Player player = Player.getInstance();
 
   late List<dynamic> topGroup; // 用于保存请求结果
 
@@ -32,11 +29,9 @@ class HomePageState extends State<HomePage> {
   }
 
   void onTap(item, ref) async {
-    var mid = item['mid'];
-    var music = await getMusic(mid);
-    PlayerState playerState = ref.read(playerProvider.notifier).state;
-    ref.read(playerProvider.notifier).state = playerState.copyWith(
-        status: 'playing', song: playerState.song.copyWith(url: music['musicUrl'], name: music['title'], pic:music['pic']));
+    // 创建 Player 实例，并监听状态变化
+    PlayerStateNotifier playerStateNotifier = ref.read(playerStateProvider.notifier);
+    playerStateNotifier.playOrResume(item['mid']);
   }
 
   @override

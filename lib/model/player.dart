@@ -1,5 +1,4 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:imusic/utils/emiiter.dart';
 
 class Player  {
 
@@ -21,20 +20,24 @@ class Player  {
     return instance;
   }
 
-  // 点击播放相关按钮
-  Future<void> play(String? source) async {
-    if (source != null) {
-      this.source = source;
-    }
-    await Player.audioPlayer.setSource(UrlSource(source!));
-    await Player.audioPlayer.resume();
+  resume(){
+    Player.audioPlayer.resume();
   }
 
-  // 订阅事件
-  void subscribe() {
-    eventBus.on<PlayEvent>().listen((event) {
-      print('Received play event: ${event}');
-      // 你可以在这里处理接收到的事件，比如更新 UI 或进行其他操作
-    });
+  // 点击播放相关按钮
+  Future<void> play(String? source) async {
+    await Player.audioPlayer.play(UrlSource(source!));
+    // if (source != null) {
+    //   this.source = source;
+    //
+    //   await Player.audioPlayer.resume();
+    // } else{
+    //   Player.audioPlayer.play();
+    // }
+
+  }
+
+  pause(){
+    Player.audioPlayer.pause();
   }
 }
