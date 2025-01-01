@@ -50,10 +50,10 @@ class MyAppState extends State<MyApp> {
       appBar: AppBar(),
       body: Stack(children: [
         _widgetOptions.elementAt(currentIndex),
-        const PlayerBall(),
+        const PlayerBall()
       ]),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex, onTap: onTap, items: _barItems),
+          currentIndex: currentIndex, onTap: onTap, items: _barItems)
     ));
   }
 }

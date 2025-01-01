@@ -4,12 +4,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:intl/intl.dart';
 
 // 根组件（root widget）
-class MyPlayer extends StatefulWidget {
+class PlayerFull extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyPlayer> {
+class _MyAppState extends State<PlayerFull> {
   AudioPlayer player = AudioPlayer();
   PlayerState? _playerState;
   Duration _duration = const Duration(minutes: 0, seconds: 0); // 总时长
@@ -87,15 +87,15 @@ class _MyAppState extends State<MyPlayer> {
             _playerState == PlayerState.paused
         ? 'assets/img/player-play.svg'
         : 'assets/img/player-pause.svg';
-    String positionTemp = DateFormat("mm:ss").format(DateTime(0).add(_position));
-    String durationTemp = DateFormat("mm:ss").format(DateTime(0).add(_duration));
+    String positionTemp =
+        DateFormat("mm:ss").format(DateTime(0).add(_position));
+    String durationTemp =
+        DateFormat("mm:ss").format(DateTime(0).add(_duration));
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
-          appBar: AppBar(
-            title: const Text(appTitle),
-            backgroundColor: Colors.red
-          ),
+          appBar:
+              AppBar(title: const Text(appTitle), backgroundColor: Colors.red),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start, // 让子组件从顶部开始排列
             children: [
@@ -112,7 +112,14 @@ class _MyAppState extends State<MyPlayer> {
                   margin: const EdgeInsets.only(top: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [const Text('歌手: '), const Text('周杰伦'), const SizedBox(width: 10), const Text('|'), const SizedBox(width: 10), Text('$positionTemp / $durationTemp')],
+                    children: [
+                      const Text('歌手: '),
+                      const Text('周杰伦'),
+                      const SizedBox(width: 10),
+                      const Text('|'),
+                      const SizedBox(width: 10),
+                      Text('$positionTemp / $durationTemp')
+                    ],
                   )),
               Container(
                   margin: const EdgeInsets.only(top: 2),
@@ -168,11 +175,16 @@ class _MyAppState extends State<MyPlayer> {
                           height: 40,
                         )),
                     SizedBox(width: 60),
-                    SvgPicture.asset(
-                      'assets/img/player-skip-forward.svg',
-                      semanticsLabel: 'Dart Logo',
-                      width: 20,
-                      height: 20,
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        'assets/img/player-skip-forward.svg',
+                        semanticsLabel: 'Dart Logo',
+                        width: 20,
+                        height: 20,
+                      ),
                     )
                   ],
                 ),

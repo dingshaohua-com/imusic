@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imusic/api/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../model/player_state_notifier.dart';
+import '../store/player_state_notifier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

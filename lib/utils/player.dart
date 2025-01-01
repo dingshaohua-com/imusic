@@ -1,10 +1,9 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class Player  {
-
+class Player {
   // 私有构造函数，确保外部不能直接实例化
   Player._();
-
 
   // 内部持有 AudioPlayer 实例
   static final AudioPlayer audioPlayer = AudioPlayer();
@@ -13,31 +12,35 @@ class Player  {
   static final Player instance = Player._();
 
   // 当前的音频源
-  late String source ;
+  late String source;
 
   // 单例模式的 getInstance 方法，直接返回实例
   static Player getInstance() {
     return instance;
   }
 
-  resume(){
+  resume() {
     Player.audioPlayer.resume();
   }
 
-  // 点击播放相关按钮
-  Future<void> play(String? source) async {
-    await Player.audioPlayer.play(UrlSource(source!));
-    // if (source != null) {
-    //   this.source = source;
-    //
-    //   await Player.audioPlayer.resume();
-    // } else{
-    //   Player.audioPlayer.play();
-    // }
+  // 播放音频
 
+  Future<bool> play(String? source) async {
+    try {
+      await Player.audioPlayer.play(UrlSource(source!));
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: "播放错误：${e.toString()}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP, // 水平和垂直居中
+          fontSize: 16.0
+      );
+      return false;
+    }
   }
 
-  pause(){
+  pause() {
     Player.audioPlayer.pause();
   }
 }

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 
 final dio = Dio();
 const yaohudOrgin = 'https://api.yaohud.cn/api/qqmusic/v2';
-String cookieStr = "qm_keyst=Q_H_L_63k3NJYkDH0fE6gF3B6SyspM4uXYqyoiDpbJGMXfTeOYlFYeJsSEp4KTCEu_AjBCZzkNMvFxXYOKlQbHIKl1PiQ; uin=869043928";
+String cookieStr = "qm_keyst=Q_H_L_63k3NPMHaeaDwmOOwnIH8GnpWZbCLvyINr_rHDy5d-Uu2n7pPZmIu9i2Nin_-D9YocL6ZbaMRjXqtuGvc-i-S3g; uin=869043928";
 String cookie = base64Encode(cookieStr.codeUnits);
 
 

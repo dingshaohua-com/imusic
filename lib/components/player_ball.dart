@@ -1,43 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:imusic/model/player_state_notifier.dart';
+import 'package:imusic/store/app_state_notifier.dart';
+import 'package:imusic/store/player_state_notifier.dart';
 import 'package:marquee/marquee.dart';
-
 import '../model/player_state.dart';
-
+import 'package:imusic/components/player_full.dart';
 
 class PlayerBall extends ConsumerWidget {
   const PlayerBall({super.key});
 
   onTapPlay(ref) {
     PlayerState playerState = ref.read(playerStateProvider.notifier).state;
-    PlayerStateNotifier playerStateNotifier = ref.read(playerStateProvider.notifier);
+    PlayerStateNotifier playerStateNotifier =
+        ref.read(playerStateProvider.notifier);
 
-    if(playerState.status == 'playing'){
+    if (playerState.status == 'playing') {
       playerStateNotifier.pause();
-    }else{
+    } else {
       playerStateNotifier.playOrResume(playerState.songId);
     }
-
-    // PlayerState playerState = ref.watch(playerProvider);
-    // if (playerState.status == 'playing') {
-    //   // player.play(playerState.song.url);
-    //   ref.read(playerProvider.notifier).state = playerState.copyWith(
-    //       status: 'stop'
-    //   );
-    //
-    // }else{
-    //
-    // }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerStateProvider);
-
-
-
 
     // if (playerState.status == 'playing') {
     //   player.play(playerState.song.url);
@@ -52,46 +39,56 @@ class PlayerBall extends ConsumerWidget {
         bottom: 0, // 控制浮动按钮的位置，确保它不会被BottomNavigationBar遮挡
         child: Center(
           child: Column(children: [
-            Container(
-                width: 180,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0, color: Colors.deepOrangeAccent),
-                  color: Colors
-                      .deepOrangeAccent, // Background color of the container
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30), // 左上角圆角
-                    topRight: Radius.circular(30), // 右上角圆角
-                    bottomLeft: Radius.circular(0), // 左下角圆角
-                    bottomRight: Radius.circular(0), // 右下角圆角
-                  ), // Round all corners with a radius of 16
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      playerState.coverUrl.isEmpty
-                          ? SvgPicture.asset('assets/img/music.svg',
-                              width: 30, height: 30)
-                          : Image.network(playerState.coverUrl,
-                              width: 30, height: 30),
+            InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (buildContext) => PlayerFull()
+                  );
+                },
+                child: Container(
+                    width: 180,
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(width: 0, color: Colors.deepOrangeAccent),
+                      color: Colors
+                          .deepOrangeAccent, // Background color of the container
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30), // 左上角圆角
+                        topRight: Radius.circular(30), // 右上角圆角
+                        bottomLeft: Radius.circular(0), // 左下角圆角
+                        bottomRight: Radius.circular(0), // 右下角圆角
+                      ), // Round all corners with a radius of 16
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          playerState.coverUrl.isEmpty
+                              ? SvgPicture.asset('assets/img/music.svg',
+                                  width: 30, height: 30)
+                              : Image.network(playerState.coverUrl,
+                                  width: 30, height: 30),
 
-                      Container(
-                        margin: const EdgeInsets.only(left: 18), // 设置外边距
-                        width: 80, // 设置宽度
-                        height: 30,
+                          Container(
+                            margin: const EdgeInsets.only(left: 18), // 设置外边距
+                            width: 80, // 设置宽度
+                            height: 30,
 
-                        child: Marquee(
-                          text: playerState.songName,
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.white),
-                          blankSpace: 20, // 跑马灯前后留白
-                          velocity: 10, // 滚动速度
-                          pauseAfterRound: const Duration(seconds: 2), // 滚动停止时间
-                        ),
-                      )
-                      // Text(playerState.song.name)
-                    ])),
+                            child: Marquee(
+                              text: playerState.songName,
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.white),
+                              blankSpace: 20, // 跑马灯前后留白
+                              velocity: 10, // 滚动速度
+                              pauseAfterRound:
+                                  const Duration(seconds: 2), // 滚动停止时间
+                            ),
+                          )
+                          // Text(playerState.song.name)
+                        ]))),
             Container(
                 width: 300,
                 padding: const EdgeInsets.symmetric(
@@ -112,7 +109,9 @@ class PlayerBall extends ConsumerWidget {
                         colorFilter: const ColorFilter.mode(
                             Colors.white, BlendMode.srcIn)),
                     InkWell(
-                        onTap: (){onTapPlay(ref);},
+                        onTap: () {
+                          onTapPlay(ref);
+                        },
                         child: SvgPicture.asset(
                           playIcon,
                           semanticsLabel: 'Dart Logo',
