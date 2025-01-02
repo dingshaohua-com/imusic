@@ -12,8 +12,9 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
 
     // 监听播放位置变化
     var player = Player.audioPlayer;
-    player.onDurationChanged.listen((Duration position) {
-      print('onDurationChanged: $position');
+    player.onDurationChanged.listen((Duration duration) {
+      state = state.copyWith(duration: duration);
+      print('onDurationChanged: $duration');
     });
 
     player.onPositionChanged.listen((p) {
@@ -60,6 +61,17 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
   playOrResume(String musicId) {
     var isResume = musicId == state.songId;
     isResume ? resume() : play(musicId);
+  }
+
+  // 暂停或播放
+  playOrStop(){
+    if(state.songId != ''){
+      if(state.status == 'playing'){
+        pause();
+      }else{
+        resume();
+      }
+    }
   }
 
   // 停止播放

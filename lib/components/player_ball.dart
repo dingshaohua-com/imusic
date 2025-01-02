@@ -31,7 +31,7 @@ class PlayerBall extends ConsumerWidget {
     // }
 
     String playIcon = playerState.status == 'stop'
-        ? 'assets/img/player-play.svg'
+        ? 'assets/img/player-playing.svg'
         : 'assets/img/player-pause.svg';
     return Positioned(
         right: 0,
