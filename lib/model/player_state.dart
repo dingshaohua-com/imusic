@@ -4,7 +4,8 @@ class PlayerState {
   final String songName; // 当前播放的歌曲名称
   final String songUrl; // 歌曲播放地址
   final String coverUrl; // 歌曲封面图
-  final int duration; // 歌曲总时长，单位：秒
+  final String author; // 歌曲作者
+  final Duration duration; // 歌曲总时长，单位：秒
   final int currentPosition; // 当前播放进度，单位：秒
   final bool isPlayerFullVisible;
 
@@ -14,7 +15,8 @@ class PlayerState {
       this.songName = '暂无播放', // 默认值为 'No Song'
       this.songUrl = '',
       this.coverUrl = '',
-      this.duration = 0, // 默认值为 0
+      this.author = '',
+      this.duration =  Duration.zero, // 默认值为 0
       this.currentPosition = 0, // 默认值为 0
       this.isPlayerFullVisible = false});
 
@@ -29,7 +31,8 @@ class PlayerState {
     String? songName,
     String? songUrl,
     String? coverUrl,
-    int? duration,
+    String? author,
+    Duration? duration,
     int? currentPosition,
     bool? isPlayerFullVisible,
   }) {
@@ -39,6 +42,7 @@ class PlayerState {
         songName: songName ?? this.songName,
         songUrl: songUrl ?? this.songUrl,
         coverUrl: coverUrl ?? this.coverUrl,
+        author: author ?? this.author,
         duration: duration ?? this.duration,
         currentPosition: currentPosition ?? this.currentPosition,
         isPlayerFullVisible: isPlayerFullVisible ?? this.isPlayerFullVisible);

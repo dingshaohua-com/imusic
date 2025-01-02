@@ -33,7 +33,7 @@ dependencies:
   flutter_svg: ^2.0.16 # svg支持
   audioplayers: ^6.1.0 # 音频播放
   dio: ^5.7.0 # 网络请求
-  intl: ^0.20.1
+  intl: ^0.20.1 # 时间格式化插件
   event_bus: ^2.0.1 # 发布订阅
   flutter_riverpod: ^2.6.1 # 全局状态管理工具
   cupertino_icons: ^1.0.8

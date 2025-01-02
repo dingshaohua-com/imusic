@@ -36,9 +36,10 @@ getHotMusic() async {
 
 getMusic(String mid) async {
   var params = {'key': 'WzwNdjdg5kUuqM2A0z7', 'mid': mid, 'type': 'url', 'cookie':cookie};
-  var songParams = {'key': 'WzwNdjdg5kUuqM2A0z7', 'mid': mid, 'type': 'song', 'cookie':cookie};;
+  var songParams = {'key': 'WzwNdjdg5kUuqM2A0z7', 'mid': mid, 'type': 'song', 'cookie':cookie};
   final res = await dio.get(yaohudOrgin, queryParameters: songParams);
   res.data['data']['musicUrl'] = Uri.parse(yaohudOrgin).replace(queryParameters: params).toString();
+  print(res.data['data'].toString());
   return res.data['data'];
 }
 

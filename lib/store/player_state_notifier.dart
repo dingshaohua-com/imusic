@@ -13,6 +13,7 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
   void play(String musicId) async {
     // 模拟获取歌曲信息
     final song = await await getMusic(musicId);
+    var duration = await Player.audioPlayer.getDuration();
 
     // 播放歌曲（这里调用你自己的播放器 API）
     var playStatus = await player.play(song['musicUrl']);
@@ -24,8 +25,8 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
         songName: song['title'],
         songUrl: song['musicUrl'],
         coverUrl: song['pic'],
-        duration: 0, // 假设歌曲信息中有总时长
-        // duration: song['duration'],  // 假设歌曲信息中有总时长
+        author: song['author'], // 作者
+        duration: duration,  // 假设歌曲信息中有总时长
         currentPosition: 0, // 播放开始时，进度从 0 开始
       );
     }
@@ -51,7 +52,8 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
         songName: 'No Song',
         songUrl: '',
         coverUrl: '',
-        duration: 0,
+        author:'',
+        duration: Duration.zero,
         currentPosition: 0);
     // player.stop();
   }

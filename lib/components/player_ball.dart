@@ -44,7 +44,7 @@ class PlayerBall extends ConsumerWidget {
                   showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      builder: (buildContext) => PlayerFull()
+                      builder: (buildContext) => const PlayerFull()
                   );
                 },
                 child: Container(
