@@ -34,8 +34,7 @@ class Player {
           msg: "播放错误：${e.toString()}",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP, // 水平和垂直居中
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
       return false;
     }
   }

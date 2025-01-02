@@ -7,27 +7,45 @@ import 'package:imusic/utils/player.dart';
 var player = Player.getInstance();
 
 class PlayerStateNotifier extends StateNotifier<PlayerState> {
-  PlayerStateNotifier() : super(PlayerState());
+  PlayerStateNotifier() : super(PlayerState()) {
+    print('PlayerStateNotifier initialized');
+
+    // 监听播放位置变化
+    var player = Player.audioPlayer;
+    player.onDurationChanged.listen((Duration position) {
+      print('onDurationChanged: $position');
+    });
+
+    player.onPositionChanged.listen((p) {
+      // print('onPositionChanged: $p');
+      state = state.copyWith(position: p);
+    });
+
+    player.onPlayerComplete.listen((event) {
+      // print('onPlayerComplete');
+    });
+
+    player.onPlayerStateChanged.listen((state) {
+      // print('onPlayerStateChanged');
+    });
+  }
 
   // 播放歌曲
   void play(String musicId) async {
-    // 模拟获取歌曲信息
-    final song = await await getMusic(musicId);
+    final song = await getMusic(musicId);
     var duration = await Player.audioPlayer.getDuration();
 
-    // 播放歌曲（这里调用你自己的播放器 API）
     var playStatus = await player.play(song['musicUrl']);
     if (playStatus) {
-      // 更新状态
       state = state.copyWith(
         status: 'playing',
         songId: song['mid'],
         songName: song['title'],
         songUrl: song['musicUrl'],
         coverUrl: song['pic'],
-        author: song['author'], // 作者
-        duration: duration,  // 假设歌曲信息中有总时长
-        currentPosition: 0, // 播放开始时，进度从 0 开始
+        author: song['author'],
+        duration: duration,
+        position: Duration.zero,
       );
     }
   }
@@ -47,15 +65,15 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
   // 停止播放
   void stop() {
     state = state.copyWith(
-        status: 'stop',
-        songId: '',
-        songName: 'No Song',
-        songUrl: '',
-        coverUrl: '',
-        author:'',
-        duration: Duration.zero,
-        currentPosition: 0);
-    // player.stop();
+      status: 'stop',
+      songId: '',
+      songName: 'No Song',
+      songUrl: '',
+      coverUrl: '',
+      author: '',
+      duration: Duration.zero,
+      position: Duration.zero,
+    );
   }
 
   // 暂停播放
@@ -64,8 +82,8 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
     player.pause();
   }
 
-  // 最大化
-  void openMax(){
+  // 最大化播放器
+  void openMax() {
     state = state.copyWith(isPlayerFullVisible: true);
   }
 }

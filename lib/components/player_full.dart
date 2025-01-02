@@ -49,7 +49,7 @@ class PlayerFull extends ConsumerWidget {
                     const SizedBox(width: 10),
                     const Text('|'),
                     const SizedBox(width: 10),
-                    Text('0:00 / ${printDuration(playerState.duration)}')
+                    Text('${printDuration(playerState.position)} / ${printDuration(playerState.duration)}')
                   ],
                 )),
             Container(
