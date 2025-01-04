@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:imusic/pages/home.dart';
 import 'package:imusic/pages/about.dart';
 import 'package:imusic/components/player_ball.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:imusic/pages/songs.dart';
 
 /*
 * 定义标签栏和标签页
 * */
-const _widgetOptions = <Widget>[HomePage(), AboutPage()];
-const _barItems = <BottomNavigationBarItem>[
+const _widgetOptions = <Widget>[SongsPage(), HomePage(), AboutPage()];
+var _barItems = <BottomNavigationBarItem>[
   BottomNavigationBarItem(
-    icon: Icon(Icons.home, size: 36),
-    label: '首页',
+    icon: SvgPicture.asset("assets/img/bottom_bar/top.svg", width: 30, height: 30),
+    label: '排行',
   ),
   BottomNavigationBarItem(
-    icon: Icon(Icons.account_circle, size: 36),
+    icon: SvgPicture.asset("assets/img/bottom_bar/songs.svg", width: 30, height: 30),
+    label: '歌单',
+  ),
+  BottomNavigationBarItem(
+    icon: SvgPicture.asset("assets/img/bottom_bar/me.svg", width: 30, height: 30),
     label: '我的',
   ),
 ];
@@ -47,13 +53,12 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      appBar: AppBar(),
-      body: Stack(children: [
-        _widgetOptions.elementAt(currentIndex),
-        const PlayerBall()
-      ]),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex, onTap: onTap, items: _barItems)
-    ));
+            appBar: AppBar(),
+            body: Stack(children: [
+              _widgetOptions.elementAt(currentIndex),
+              const PlayerBall()
+            ]),
+            bottomNavigationBar: BottomNavigationBar(
+                currentIndex: currentIndex, onTap: onTap, items: _barItems)));
   }
 }
