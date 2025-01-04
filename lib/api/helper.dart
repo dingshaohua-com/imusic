@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 getSongsParams(){
   var params = {
     "g_tk": 1278911659,
@@ -23,7 +25,7 @@ getSongsParams(){
       },
       "playlist": {
         "method": "get_playlist_by_category",
-        "param": {"id": 8, "curPage": 1, "size": 40, "order": 5, "titleid": 8},
+        "param": {"id": 8, "curPage": 1, "size": 10, "order": 5, "titleid": 8},
         "module": "playlist.PlayListPlazaServer"
       },
       "new_song": {
@@ -57,5 +59,6 @@ getSongsParams(){
       }
     }
   };
+  params['data'] = jsonEncode(params['data']);
   return params;
 }

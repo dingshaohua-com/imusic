@@ -22,6 +22,8 @@ class SongsPageState extends State<SongsPage> {
   // 异步 HTTP 请求方法
   void loadData() async {
     var res = await getSongs();
+    print(22222);
+    print(res);
     setState(() {
       topGroup = res;
     });
@@ -36,16 +38,31 @@ class SongsPageState extends State<SongsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(3333);
+    print(topGroup);
     return Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.red, // 给 Container 设置背景色
-        child: Column(children: [
-          ElevatedButton(
-              onPressed: () {
-                loadData();
-              },
-              child: const Text('测试'))
-        ]));
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.limeAccent, // 给 Container 设置背景色
+      child: GridView.count(
+        // Create a grid with 2 columns. If you change the scrollDirection to
+        // horizontal, this produces 2 rows.
+        crossAxisCount: 2,
+        // Generate 100 widgets that display their index in the List.
+        children: List.generate(topGroup.length, (index) {
+          var item = topGroup[index];
+          return Center(
+            child: Column(
+              children: [
+                Image.network( item['cover_url_small'], width: 100, height: 100,),
+                Text(
+                  item['title']
+                ),
+              ],
+            )
+          );
+        }),
+      ),
+    );
   }
 }
