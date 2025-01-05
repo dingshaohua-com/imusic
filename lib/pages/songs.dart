@@ -22,8 +22,6 @@ class SongsPageState extends State<SongsPage> {
   // 异步 HTTP 请求方法
   void loadData() async {
     var res = await getSongs();
-    print(22222);
-    print(res);
     setState(() {
       topGroup = res;
     });
@@ -38,31 +36,44 @@ class SongsPageState extends State<SongsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(3333);
-    print(topGroup);
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.limeAccent, // 给 Container 设置背景色
-      child: GridView.count(
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
-        crossAxisCount: 2,
-        // Generate 100 widgets that display their index in the List.
-        children: List.generate(topGroup.length, (index) {
-          var item = topGroup[index];
-          return Center(
-            child: Column(
-              children: [
-                Image.network( item['cover_url_small'], width: 100, height: 100,),
-                Text(
-                  item['title']
-                ),
-              ],
+    return SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+            child: Padding(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: Wrap(
+                  alignment: WrapAlignment.center, // 水平居中
+                  runAlignment: WrapAlignment.center, // 让每行中的元素也居中
+                  spacing: 20.0, // 水平方向的间距
+                  runSpacing: 30.0, // 垂直方向的间距
+                  children: List.generate(topGroup.length, (index) {
+                    var item = topGroup[index];
+                    return SizedBox(
+                      width: 150, // 每个子项的宽度，Wrap 会根据这个宽度换行
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              item['cover'],
+                              fit: BoxFit.cover,
+                              width: 150, // 设置图片宽度，确保宽高比一致
+                            ),
+                          ),
+                          Text(
+                            item['title'],
+                            style: const TextStyle(fontSize: 14),
+                            // overflow: TextOverflow.ellipsis,
+                            // textAlign: TextAlign.center, // 文本居中
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                )
             )
-          );
-        }),
-      ),
+        )
     );
   }
 }

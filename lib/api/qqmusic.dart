@@ -17,5 +17,5 @@ getSongs() async {
   var result = jsonDecode(res.data); // 后端返回虽然是json，但是响应头 content-type:text/plain; charset=utf-8;
   print(1111);
   print(result);
-  return result['playlist']['data']['v_playlist'];
+  return result['recomPlaylist']['data']['v_hot'];
 }
