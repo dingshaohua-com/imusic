@@ -11,6 +11,7 @@ class SongsPage extends StatefulWidget {
 
 class SongsPageState extends State<SongsPage> {
   late List<dynamic> topGroup; // 用于保存请求结果
+  int page = 1;
 
   @override
   void initState() {
@@ -21,7 +22,7 @@ class SongsPageState extends State<SongsPage> {
 
   // 异步 HTTP 请求方法
   void loadData() async {
-    var res = await getSongs();
+    var res = await getSongs(page);
     setState(() {
       topGroup = res;
     });
@@ -36,6 +37,8 @@ class SongsPageState extends State<SongsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("--------------");
+    print(topGroup);
     return SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -56,13 +59,13 @@ class SongsPageState extends State<SongsPage> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image.network(
-                              item['cover'],
+                              item['imgurl'],
                               fit: BoxFit.cover,
                               width: 150, // 设置图片宽度，确保宽高比一致
                             ),
                           ),
                           Text(
-                            item['title'],
+                            item['dissname'],
                             style: const TextStyle(fontSize: 14),
                             // overflow: TextOverflow.ellipsis,
                             // textAlign: TextAlign.center, // 文本居中
