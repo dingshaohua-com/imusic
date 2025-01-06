@@ -10,21 +10,56 @@ class SongsPage extends StatefulWidget {
 }
 
 class SongsPageState extends State<SongsPage> {
-  late List<dynamic> topGroup; // 用于保存请求结果
-  int page = 1;
+  final List<dynamic> _items = []; // 数据列表
+  final ScrollController _scrollController = ScrollController();
+  int _page = 1;
+  bool _isLoadingMore = false; // 上拉加载状态
 
   @override
   void initState() {
     super.initState();
-    topGroup = []; // 初始状态
-    loadData(); // 发起请求
+    _loadInitialData(); // 初始加载数据
+    _scrollController.addListener(() {
+      // 检测是否滚动到底部
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          !_isLoadingMore) {
+        _loadMoreData();
+      }
+    });
   }
 
-  // 异步 HTTP 请求方法
-  void loadData() async {
-    var res = await getSongs(page);
+  // 下拉刷新
+  Future<void> _refreshData() async {
     setState(() {
-      topGroup = res;
+      _page = 1; // 重置页码
+      _items.clear(); // 清空旧数据
+    });
+    await _loadInitialData(); // 重新加载数据
+  }
+
+  // 加载初始数据
+  Future<void> _loadInitialData() async {
+    print(1111);
+    List<dynamic> newData = await getSongs(_page);
+    print(2222);
+    print(newData);
+    setState(() {
+      _items.addAll(newData);
+    });
+  }
+
+  // 上拉加载更多
+  Future<void> _loadMoreData() async {
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    var newData = await getSongs(_page + 1);
+    setState(() {
+      _page++; // 更新页码
+      _items.addAll(newData);
+      _isLoadingMore = false;
     });
   }
 
@@ -36,47 +71,64 @@ class SongsPageState extends State<SongsPage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose(); // 释放资源
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    print("--------------");
-    print(topGroup);
-    return SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.only(bottom: 100),
-                child: Wrap(
-                  alignment: WrapAlignment.center, // 水平居中
-                  runAlignment: WrapAlignment.center, // 让每行中的元素也居中
-                  spacing: 20.0, // 水平方向的间距
-                  runSpacing: 30.0, // 垂直方向的间距
-                  children: List.generate(topGroup.length, (index) {
-                    var item = topGroup[index];
-                    return SizedBox(
-                      width: 150, // 每个子项的宽度，Wrap 会根据这个宽度换行
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              item['imgurl'],
-                              fit: BoxFit.cover,
-                              width: 150, // 设置图片宽度，确保宽高比一致
-                            ),
-                          ),
-                          Text(
-                            item['dissname'],
-                            style: const TextStyle(fontSize: 14),
-                            // overflow: TextOverflow.ellipsis,
-                            // textAlign: TextAlign.center, // 文本居中
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                )
-            )
-        )
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0), // 左右和下边的边距
+        child: GridView.builder(
+          controller: _scrollController, // 滚动监听
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200.0, // 每个子项的最大宽度
+            crossAxisSpacing: 20.0, // 列之间的间距
+            mainAxisSpacing: 20.0, // 行之间的间距
+            childAspectRatio: 0.75, // 调整宽高比，适配文字内容
+          ),
+          itemCount: _items.length + 1, // 数据数量加上加载指示器
+          itemBuilder: (context, index) {
+            if (index == _items.length) {
+              // 底部加载指示器
+              return _isLoadingMore
+                  ? const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: CircularProgressIndicator()),
+              )
+                  : const SizedBox.shrink();
+            }
+            var item = _items[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0), // 图片圆角
+                  child: Image.network(
+                    item['imgurl'], // 图片 URL
+                    fit: BoxFit.cover, // 填充模式
+                  ),
+                ),
+                const SizedBox(height: 8), // 图片和文字之间的间距
+                SizedBox(
+                  width: 150, // 固定宽度，确保文字宽度与图片一致
+                  child: Text(
+                    item['dissname'], // 文本内容
+                    style: const TextStyle(fontSize: 14), // 文本样式
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
+
+
+
 }
