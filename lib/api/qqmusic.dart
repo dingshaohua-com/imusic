@@ -10,7 +10,5 @@ const orgin = 'https://api.dingshaohua.com/imusic';
 getSongs(int page) async {
   var url = '$orgin/getSongLists';
   final res = await dio.get(url, queryParameters: {'categoryId': 10000000, 'page': page});
-  print('-------ooo------');
-  print(res.data['response']['data']);
   return res.data['response']['data']['list'];
 }

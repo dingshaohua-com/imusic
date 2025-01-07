@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   marquee: ^2.3.0 #text 跑马灯
   fluttertoast: ^8.2.10 # 原生Toast
+  go_router: ^14.6.3
 
 dev_dependencies:
   flutter_test:

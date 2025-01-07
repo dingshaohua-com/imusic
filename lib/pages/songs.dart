@@ -40,10 +40,7 @@ class SongsPageState extends State<SongsPage> {
 
   // 加载初始数据
   Future<void> _loadInitialData() async {
-    print(1111);
     List<dynamic> newData = await getSongs(_page);
-    print(2222);
-    print(newData);
     setState(() {
       _items.addAll(newData);
     });
