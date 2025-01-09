@@ -4,34 +4,35 @@ import 'package:imusic/pages/home.dart';
 import 'package:imusic/pages/about.dart';
 import 'package:imusic/pages/songs.dart';
 
+// 定义路由
 final GoRouter router = GoRouter(
-  initialLocation: '/song',
+  initialLocation: '/songs',
   routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return ScaffoldWithNavBar(child: child);
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return ScaffoldWithNavBar(navigationShell: navigationShell);
       },
-      routes: [
-        // 显示在底部导航栏下方的子路由
-        GoRoute(
-          path: '/song',
-          builder: (context, state) {
-            return const SongsPage();
-          },
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+                path: '/songs', builder: (context, state) => const SongsPage()),
+          ],
         ),
-        GoRoute(
-          path: '/home',
-          builder: (context, state) {
-            return const HomePage();
-          },
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+                path: '/home', builder: (context, state) => const HomePage()),
+          ],
         ),
-        GoRoute(
-          path: '/about',
-          builder: (context, state) {
-            return const AboutPage();
-          },
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+                path: '/about',
+                builder: (context, state) => const AboutPage()),
+          ],
         ),
       ],
-    ),
+    )
   ],
 );

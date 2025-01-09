@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:imusic/components/player_ball.dart';
+
 
 /*
 * 定义标签栏和标签页
@@ -20,39 +22,29 @@ var _barItems = <BottomNavigationBarItem>[
       label: '我的'),
 ];
 
-var _routes = <String>[
-  '/song',
-  '/home',
-  '/about',
-];
+// 定义ScaffoldWithNavBar （底部导航和页面展示框架）
+class ScaffoldWithNavBar extends StatelessWidget {
+  const ScaffoldWithNavBar({
+    required this.navigationShell,
+    Key? key,
+  }) : super(key: key ?? const ValueKey('ScaffoldWithNavBar'));
 
-class ScaffoldWithNavBar extends StatefulWidget {
-  const ScaffoldWithNavBar({super.key, required this.child});
-  final Widget child;
-
-  @override
-  State<ScaffoldWithNavBar> createState() =>
-      _ScaffoldWithBottomNavBarState();
-}
-
-class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithNavBar> {
-  int currentIndex = 0;
+  final StatefulNavigationShell navigationShell;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Scaffold(
+      body: Stack(children: [navigationShell, const PlayerBall()]),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
         items: _barItems,
-        onTap: (index){
-          setState(() {
-            currentIndex = index;
-          });
-          context.go(_routes.elementAt(index));
-        },
+        currentIndex: navigationShell.currentIndex,
+        onTap: (int index) => _onTap(context, index),
       ),
-      // 內容由外面來決定
-      body: widget.child,
     );
+  }
+
+  void _onTap(context, index) {
+    var initialLocation = index == navigationShell.currentIndex;
+    navigationShell.goBranch(index, initialLocation: initialLocation);
   }
 }
