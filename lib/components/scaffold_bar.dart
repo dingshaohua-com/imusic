@@ -26,20 +26,24 @@ var _barItems = <BottomNavigationBarItem>[
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({
     required this.navigationShell,
+    this.showNavBar=false,
     Key? key,
   }) : super(key: key ?? const ValueKey('ScaffoldWithNavBar'));
 
   final StatefulNavigationShell navigationShell;
+  final bool showNavBar;
 
   @override
   Widget build(context) {
+
+    // final location = GoRouter.of(context).location;
     return Scaffold(
       body: Stack(children: [navigationShell, const PlayerBall()]),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: showNavBar?BottomNavigationBar(
         items: _barItems,
         currentIndex: navigationShell.currentIndex,
         onTap: (int index) => _onTap(context, index),
-      ),
+      ):null,
     );
   }
 

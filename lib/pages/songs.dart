@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:imusic/api/qqmusic.dart';
+import 'package:imusic/components/scaffold_bar.dart';
 import '../store/player_state_notifier.dart';
 
 class SongsPage extends StatefulWidget {
@@ -12,7 +14,7 @@ class SongsPage extends StatefulWidget {
 class SongsPageState extends State<SongsPage> {
   final List<dynamic> _items = []; // 数据列表
   final ScrollController _scrollController = ScrollController();
-  int _page = 1;
+  int _page = 0;
   bool _isLoadingMore = false; // 上拉加载状态
 
   @override
@@ -32,7 +34,7 @@ class SongsPageState extends State<SongsPage> {
   // 下拉刷新
   Future<void> _refreshData() async {
     setState(() {
-      _page = 1; // 重置页码
+      _page = 0; // 重置页码
       _items.clear(); // 清空旧数据
     });
     await _loadInitialData(); // 重新加载数据
@@ -73,7 +75,6 @@ class SongsPageState extends State<SongsPage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -94,38 +95,39 @@ class SongsPageState extends State<SongsPage> {
               // 底部加载指示器
               return _isLoadingMore
                   ? const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: CircularProgressIndicator()),
-              )
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
                   : const SizedBox.shrink();
             }
             var item = _items[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0), // 图片圆角
-                  child: Image.network(
-                    item['imgurl'], // 图片 URL
-                    fit: BoxFit.cover, // 填充模式
-                  ),
+            return InkWell(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0), // 图片圆角
+                      child: Image.network(
+                        item['imgurl'], // 图片 URL
+                        fit: BoxFit.cover, // 填充模式
+                      ),
+                    ),
+                    const SizedBox(height: 8), // 图片和文字之间的间距
+                    SizedBox(
+                      width: 150, // 固定宽度，确保文字宽度与图片一致
+                      child: Text(
+                        item['dissname'], // 文本内容
+                        style: const TextStyle(fontSize: 14), // 文本样式
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8), // 图片和文字之间的间距
-                SizedBox(
-                  width: 150, // 固定宽度，确保文字宽度与图片一致
-                  child: Text(
-                    item['dissname'], // 文本内容
-                    style: const TextStyle(fontSize: 14), // 文本样式
-                  ),
-                ),
-              ],
-            );
+                onTap: () {
+                  context.go('/songs/songs_dtl');
+                });
           },
         ),
       ),
     );
   }
-
-
-
 }

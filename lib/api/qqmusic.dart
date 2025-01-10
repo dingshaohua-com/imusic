@@ -12,3 +12,13 @@ getSongs(int page) async {
   final res = await dio.get(url, queryParameters: {'categoryId': 10000000, 'page': page});
   return res.data['response']['data']['list'];
 }
+
+
+/*
+* 获取歌单详情
+* */
+getSongsDtl(int page) async {
+  var url = '$orgin/getSongListDetail';
+  final res = await dio.get(url, queryParameters: {'disstid': 7011264340, 'page': page});
+  return res.data['response']['cdlist'][0]['songlist'];
+}
