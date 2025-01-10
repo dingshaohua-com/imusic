@@ -17,8 +17,8 @@ getSongs(int page) async {
 /*
 * 获取歌单详情
 * */
-getSongsDtl(int page) async {
+getSongsDtl(int page, String id) async {
   var url = '$orgin/getSongListDetail';
-  final res = await dio.get(url, queryParameters: {'disstid': 7011264340, 'page': page});
+  final res = await dio.get(url, queryParameters: {'disstid': id, 'page': page});
   return res.data['response']['cdlist'][0]['songlist'];
 }

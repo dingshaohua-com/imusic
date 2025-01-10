@@ -13,9 +13,11 @@ final GoRouter router = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // 判断是否需要显示底部导航栏
-        List<String> paths =  ['/songs', '/home', '/about'];
-        bool showNavBar =paths.any((path)=>state.uri.toString() == path.toString());
-        return ScaffoldWithNavBar(navigationShell: navigationShell, showNavBar: showNavBar);
+        List<String> paths = ['/songs', '/home', '/about'];
+        bool showNavBar =
+            paths.any((path) => state.uri.toString() == path.toString());
+        return ScaffoldWithNavBar(
+            navigationShell: navigationShell, showNavBar: showNavBar);
       },
       branches: [
         StatefulShellBranch(
@@ -27,7 +29,11 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   // parentNavigatorKey: _sectionANavigatorKey,
                   path: 'songs_dtl',
-                  builder: (context, state) => const SongsDtlPage(),
+                  builder: (context, state) {
+                    print(state.pathParameters);
+                    return SongsDtlPage(id: '234');
+                  }
+
                 )
               ],
             ),
