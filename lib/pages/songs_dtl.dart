@@ -16,8 +16,7 @@ class _SongsDtlPageState extends State<SongsDtlPage> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              // 返回按钮点击事件
+            onPressed: () {  // 返回按钮点击事件
               context.pop();
             },
           ),
