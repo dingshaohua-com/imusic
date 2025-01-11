@@ -79,12 +79,12 @@ class SongsDtlPageState extends State<SongsDtlPage> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              // 返回按钮点击事件
-              context.pop();
-            },
-          ),
+            icon:
+            const Icon(Icons.arrow_back),
+              onPressed: () {
+                context.pop();  // 返回按钮点击事件
+              },
+            ),
         ),
         body: RefreshIndicator(
           onRefresh: _refreshData,

@@ -15,7 +15,7 @@ final GoRouter router = GoRouter(
         // 判断是否需要显示底部导航栏
         List<String> paths = ['/songs', '/home', '/about'];
         bool showNavBar =
-            paths.any((path) => state.uri.toString() == path.toString());
+            paths.any((path) => state.uri.path == path.toString());
         return ScaffoldWithNavBar(
             navigationShell: navigationShell, showNavBar: showNavBar);
       },
