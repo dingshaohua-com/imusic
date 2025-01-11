@@ -41,7 +41,7 @@ class SongsDtlPageState extends State<SongsDtlPage> {
 
   // 加载初始数据
   Future<void> _loadInitialData() async {
-    List<dynamic> newData = await getSongsDtl(_page, st);
+    List<dynamic> newData = await getSongsDtl(_page, widget.id);
     setState(() {
       _items.addAll(newData);
     });
@@ -53,7 +53,7 @@ class SongsDtlPageState extends State<SongsDtlPage> {
       _isLoadingMore = true;
     });
 
-    var newData = await getSongsDtl(_page + 1, id);
+    var newData = await getSongsDtl(_page + 1, widget.id);
     setState(() {
       _page++; // 更新页码
       _items.addAll(newData);
@@ -76,8 +76,6 @@ class SongsDtlPageState extends State<SongsDtlPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(1111111);
-    print(_items);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(

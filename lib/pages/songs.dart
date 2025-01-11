@@ -123,7 +123,7 @@ class SongsPageState extends State<SongsPage> {
                   ],
                 ),
                 onTap: () {
-                  context.go('/songs/songs_dtl');
+                  context.go('/songs/songs_dtl?id=${item['dissid']}');
                 });
           },
         ),

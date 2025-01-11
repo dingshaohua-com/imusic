@@ -30,8 +30,8 @@ final GoRouter router = GoRouter(
                   // parentNavigatorKey: _sectionANavigatorKey,
                   path: 'songs_dtl',
                   builder: (context, state) {
-                    print(state.pathParameters);
-                    return SongsDtlPage(id: '234');
+                    var id = GoRouterState.of(context).uri.queryParameters['id'].toString();
+                    return SongsDtlPage(id: id);
                   }
 
                 )
