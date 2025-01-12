@@ -20,5 +20,5 @@ getSongs(int page) async {
 getSongsDtl(int page, String id) async {
   var url = '$orgin/getSongListDetail';
   final res = await dio.get(url, queryParameters: {'disstid': id, 'page': page});
-  return res.data['response']['cdlist'][0]['songlist'];
+  return res.data['response']['cdlist'][0];
 }
