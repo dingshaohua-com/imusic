@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imusic/components/player_ball.dart';
 
-
 /*
 * 定义标签栏和标签页
 * */
@@ -22,33 +21,110 @@ var _barItems = <BottomNavigationBarItem>[
       label: '我的'),
 ];
 
-// 定义ScaffoldWithNavBar （底部导航和页面展示框架）
-class ScaffoldWithNavBar extends StatelessWidget {
-  const ScaffoldWithNavBar({
-    required this.navigationShell,
-    this.showNavBar=false,
-    Key? key,
-  }) : super(key: key ?? const ValueKey('ScaffoldWithNavBar'));
-
+class ScaffoldWithNavBar extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
   final bool showNavBar;
 
-  @override
-  Widget build(context) {
+  const ScaffoldWithNavBar({
+    required this.navigationShell,
+    this.showNavBar = false,
+    Key? key,
+  }) : super(key: key ?? const ValueKey('ScaffoldWithNavBar'));
 
-    // final location = GoRouter.of(context).location;
+  @override
+  _ScaffoldWithNavBarState createState() => _ScaffoldWithNavBarState();
+}
+
+class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _heightAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 初始化动画控制器
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    // 定义高度动画
+    _heightAnimation = Tween<double>(  // 用于定义动画的起始和结束值
+      // 表示动画开始时的高度为 0 像素（假设这是底部导航栏的高度），end: 60 表示动画结束时的高度为 60 像素（完全隐藏）。
+      begin: 0,
+      end: 56,
+    ).animate(CurvedAnimation(
+      parent: _controller, // parent 参数绑定到 _controller
+      curve: Curves.easeInOut, // curve 参数设置为 Curves.easeInOut，表示动画在开始和结束时都会逐渐加速和减速，中间部分速度较快。
+    ));
+
+
+
+    // 初始化动画状态
+    if (widget.showNavBar) {
+      print("显示");
+      _controller.forward(); // 显示
+    } else {
+      print("隐藏");
+      _controller.reverse(); // 隐藏
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ScaffoldWithNavBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // 根据 showNavBar 的变化触发动画
+    if (widget.showNavBar) {
+      print("显示");
+      _controller.forward(); // 显示
+    } else {
+      print("隐藏");
+      _controller.reverse(); // 隐藏
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
-      body: Stack(children: [navigationShell, const PlayerBall()]),
-      bottomNavigationBar: showNavBar?BottomNavigationBar(
-        items: _barItems,
-        currentIndex: navigationShell.currentIndex,
-        onTap: (int index) => _onTap(context, index),
-      ):null,
+      body: Stack(
+        children: [
+          widget.navigationShell,
+          const PlayerBall(), // 悬浮播放小球
+        ],
+      ),
+      bottomNavigationBar: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          // 当高度接近 0 时，移除导航栏内容
+          if (_heightAnimation.value <= 1) {
+            return const SizedBox.shrink(); // 返回空组件以释放空间
+          }
+          return SizedBox(
+            height: _heightAnimation.value, // 动态调整高度
+            child: child,
+          );
+        },
+        child: BottomNavigationBar(
+          items: _barItems,
+          currentIndex: widget.navigationShell.currentIndex,
+          onTap: (int index) => _onTap(context, index),
+        ),
+      ),
     );
   }
 
-  void _onTap(context, index) {
-    var initialLocation = index == navigationShell.currentIndex;
-    navigationShell.goBranch(index, initialLocation: initialLocation);
+  void _onTap(BuildContext context, int index) {
+    var initialLocation = index == widget.navigationShell.currentIndex;
+    widget.navigationShell.goBranch(index, initialLocation: initialLocation);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
