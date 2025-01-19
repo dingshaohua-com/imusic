@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -118,13 +119,24 @@ class SongsDtlPageState extends State<SongsDtlPage> {
                       constraints: const BoxConstraints.expand(),
                       child: logo.isEmpty
                           ? SvgPicture.asset('assets/img/music.svg',
-                          width: double.infinity,
-                          fit: BoxFit.cover)
-                          : Image.network(
-                              logo,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                              width: double.infinity, fit: BoxFit.cover)
+                          : CachedNetworkImage(
+                              imageUrl: logo,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )),
+
+                      // Image.network(
+                      //         logo,
+                      //         width: double.infinity,
+                      //         fit: BoxFit.cover,
+                      //       ),
                     ),
                     Positioned(
                       bottom: 10,
@@ -172,7 +184,9 @@ class SongsDtlPageState extends State<SongsDtlPage> {
                     //   backgroundImage: NetworkImage(item['pic']!), // 图片加载
                     // ),
                     title: Text(item['title']), // 显示 name 字段
-                    subtitle: Text(item['singer'].map((singer) => singer['title']).join('、')),
+                    subtitle: Text(item['singer']
+                        .map((singer) => singer['title'])
+                        .join('、')),
                     onTap: () {
                       print('点击了');
                       // onTap(item, ref);

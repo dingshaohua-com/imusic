@@ -41,6 +41,8 @@ dependencies:
   fluttertoast: ^8.2.10 # 原生Toast
   go_router: ^14.6.3 # 路由器
   flutter_launcher_icons: ^0.14.3 # 启动图
+  cached_network_image: ^3.4.1 # 网络图片缓存
+  shared_preferences: ^2.3.5 # 本地存储
 
 flutter_launcher_icons:
   android: true

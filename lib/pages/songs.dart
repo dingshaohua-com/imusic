@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imusic/api/qqmusic.dart';
 import 'package:imusic/components/scaffold_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../store/player_state_notifier.dart';
+
+final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
 class SongsPage extends StatefulWidget {
   const SongsPage({super.key});
@@ -20,7 +26,22 @@ class SongsPageState extends State<SongsPage> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData(); // 初始加载数据
+    initHandler();
+  }
+
+  initHandler() async {
+    final String? songsCacheString = await asyncPrefs.getString('songs');
+    if (songsCacheString!.isNotEmpty) {
+      // 如果有缓存 则第一页走缓存，减少用户等待时长，下拉刷新再让他更新
+      List<dynamic> songsCache = jsonDecode(songsCacheString);
+      setState(() {
+        _items.addAll(songsCache);
+      });
+    } else {
+      _loadInitialData(); // 初始加载数据
+    }
+    _loadInitialData();
+
     _scrollController.addListener(() {
       // 检测是否滚动到底部
       if (_scrollController.position.pixels ==
@@ -43,6 +64,9 @@ class SongsPageState extends State<SongsPage> {
   // 加载初始数据
   Future<void> _loadInitialData() async {
     List<dynamic> newData = await getSongs(_page);
+    if (_page == 0) {
+      await asyncPrefs.setString('songs', jsonEncode(newData));
+    }
     setState(() {
       _items.addAll(newData);
     });
@@ -79,11 +103,11 @@ class SongsPageState extends State<SongsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize:  const Size.fromHeight(0), // 设置AppBar的最小高度
+          preferredSize: const Size.fromHeight(0), // 设置AppBar的最小高度
           // Size.fromHeight(10), // 设置AppBar的高度为100
           child: AppBar(
-            // title: Text('自定义AppBar高度'),
-          ),
+              // title: Text('自定义AppBar高度'),
+              ),
         ),
         body: RefreshIndicator(
           onRefresh: _refreshData,
@@ -115,10 +139,18 @@ class SongsPageState extends State<SongsPage> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0), // 图片圆角
-                          child: Image.network(
-                            item['imgurl'], // 图片 URL
-                            fit: BoxFit.cover, // 填充模式
+                          child: CachedNetworkImage(
+                            imageUrl: item['imgurl'],
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
+
+                          // Image.network(
+                          //   item['imgurl'], // 图片 URL
+                          //   fit: BoxFit.cover, // 填充模式
+                          // ),
                         ),
                         const SizedBox(height: 8), // 图片和文字之间的间距
                         SizedBox(
