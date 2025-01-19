@@ -31,7 +31,7 @@ class SongsPageState extends State<SongsPage> {
 
   initHandler() async {
     final String? songsCacheString = await asyncPrefs.getString('songs');
-    if (songsCacheString!.isNotEmpty) {
+    if (songsCacheString!=null) {
       // 如果有缓存 则第一页走缓存，减少用户等待时长，下拉刷新再让他更新
       List<dynamic> songsCache = jsonDecode(songsCacheString);
       setState(() {
@@ -40,8 +40,6 @@ class SongsPageState extends State<SongsPage> {
     } else {
       _loadInitialData(); // 初始加载数据
     }
-    _loadInitialData();
-
     _scrollController.addListener(() {
       // 检测是否滚动到底部
       if (_scrollController.position.pixels ==
