@@ -11,7 +11,6 @@ const origin = 'https://qmusic.dingshaohua.com';
 * */
 getSongs(int page) async {
   var url = '$origin/getSongLists';
-  print(url);
   final res = await dio.get(url, queryParameters: {'categoryId': 10000000, 'page': page});
   return res.data['data'];
 }

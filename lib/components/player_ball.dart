@@ -28,9 +28,6 @@ class PlayerBall extends ConsumerWidget {
     var mediaQueryData = MediaQuery.of(context);
     // 判断是否是Pad
     bool isPad = mediaQueryData.size.width > 700;
-    print('mediaQueryData.size.width');
-    print(mediaQueryData.size.width);
-    print(mediaQueryData.size.width > 700);
 
     final playerState = ref.watch(playerStateProvider);
     // if (playerState.status == 'playing') {

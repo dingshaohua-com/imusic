@@ -51,7 +51,6 @@ class SongsDtlPageState extends State<SongsDtlPage> {
 
     // 首次赋值，后续就不在更新了
     if (dissname == '') {
-      print("进来啦");
       setState(() {
         dissname = newData['dissname'];
         desc = newData['desc'];

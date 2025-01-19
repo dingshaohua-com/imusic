@@ -76,10 +76,8 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
 
     // 根据 showNavBar 的变化触发动画
     if (widget.showNavBar) {
-      print("显示");
       _controller.forward(); // 显示
     } else {
-      print("隐藏");
       _controller.reverse(); // 隐藏
     }
   }

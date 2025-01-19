@@ -48,7 +48,6 @@ class HomePageState extends State<HomePage> {
                 title: Text(item['title']), // 显示 name 字段
                 subtitle: Text(item['author']),
                 onTap: () {
-                  print('点击了');
                   onTap(item, ref);
                 });
           });
