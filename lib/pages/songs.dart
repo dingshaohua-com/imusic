@@ -78,57 +78,65 @@ class SongsPageState extends State<SongsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _refreshData,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0), // 左右和下边的边距
-        child: GridView.builder(
-          controller: _scrollController, // 滚动监听
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200.0, // 每个子项的最大宽度
-            crossAxisSpacing: 20.0, // 列之间的间距
-            mainAxisSpacing: 20.0, // 行之间的间距
-            childAspectRatio: 0.75, // 调整宽高比，适配文字内容
+    return Scaffold(
+        appBar: PreferredSize(
+          preferredSize:  const Size.fromHeight(0), // 设置AppBar的最小高度
+          // Size.fromHeight(10), // 设置AppBar的高度为100
+          child: AppBar(
+            // title: Text('自定义AppBar高度'),
           ),
-          itemCount: _items.length + 1, // 数据数量加上加载指示器
-          itemBuilder: (context, index) {
-            if (index == _items.length) {
-              // 底部加载指示器
-              return _isLoadingMore
-                  ? const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : const SizedBox.shrink();
-            }
-            var item = _items[index];
-            return InkWell(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0), // 图片圆角
-                      child: Image.network(
-                        item['imgurl'], // 图片 URL
-                        fit: BoxFit.cover, // 填充模式
-                      ),
-                    ),
-                    const SizedBox(height: 8), // 图片和文字之间的间距
-                    SizedBox(
-                      width: 150, // 固定宽度，确保文字宽度与图片一致
-                      child: Text(
-                        item['dissname'], // 文本内容
-                        style: const TextStyle(fontSize: 14), // 文本样式
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  context.go('/songs/songs_dtl?id=${item['dissid']}');
-                });
-          },
         ),
-      ),
-    );
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 左右和下边的边距
+            child: GridView.builder(
+              controller: _scrollController, // 滚动监听
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200.0, // 每个子项的最大宽度
+                crossAxisSpacing: 20.0, // 列之间的间距
+                mainAxisSpacing: 20.0, // 行之间的间距
+                childAspectRatio: 0.75, // 调整宽高比，适配文字内容
+              ),
+              itemCount: _items.length + 1, // 数据数量加上加载指示器
+              itemBuilder: (context, index) {
+                if (index == _items.length) {
+                  // 底部加载指示器
+                  return _isLoadingMore
+                      ? const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      : const SizedBox.shrink();
+                }
+                var item = _items[index];
+                return InkWell(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0), // 图片圆角
+                          child: Image.network(
+                            item['imgurl'], // 图片 URL
+                            fit: BoxFit.cover, // 填充模式
+                          ),
+                        ),
+                        const SizedBox(height: 8), // 图片和文字之间的间距
+                        SizedBox(
+                          width: 150, // 固定宽度，确保文字宽度与图片一致
+                          child: Text(
+                            item['dissname'], // 文本内容
+                            style: const TextStyle(fontSize: 14), // 文本样式
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      context.go('/songs/songs_dtl?id=${item['dissid']}');
+                    });
+              },
+            ),
+          ),
+        ));
   }
 }

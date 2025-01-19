@@ -54,7 +54,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
     _heightAnimation = Tween<double>(  // 用于定义动画的起始和结束值
       // 表示动画开始时的高度为 0 像素（假设这是底部导航栏的高度），end: 60 表示动画结束时的高度为 60 像素（完全隐藏）。
       begin: 0,
-      end: 56,
+      end: 64,
     ).animate(CurvedAnimation(
       parent: _controller, // parent 参数绑定到 _controller
       curve: Curves.easeInOut, // curve 参数设置为 Curves.easeInOut，表示动画在开始和结束时都会逐渐加速和减速，中间部分速度较快。
@@ -64,10 +64,8 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
 
     // 初始化动画状态
     if (widget.showNavBar) {
-      print("显示");
       _controller.forward(); // 显示
     } else {
-      print("隐藏");
       _controller.reverse(); // 隐藏
     }
   }
@@ -100,7 +98,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
         animation: _controller,
         builder: (context, child) {
           // 当高度接近 0 时，移除导航栏内容
-          if (_heightAnimation.value <= 1) {
+          if (_heightAnimation.value <= 0.1) {
             return const SizedBox.shrink(); // 返回空组件以释放空间
           }
           return SizedBox(
