@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imusic/api/qqmusic.dart';
@@ -16,7 +18,7 @@ class SongsDtlPage extends StatefulWidget {
 class SongsDtlPageState extends State<SongsDtlPage> {
   final List<dynamic> _items = []; // 数据列表
   String dissname = '';
-  String desc = '---';
+  String desc = '';
   String logo = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -49,6 +51,8 @@ class SongsDtlPageState extends State<SongsDtlPage> {
   // 加载初始数据
   Future<void> _loadInitialData() async {
     var newData = await getSongsDtl(_page, widget.id);
+    print(111);
+    print(newData);
 
     // 首次赋值，后续就不在更新了
     if (dissname == '') {
@@ -139,37 +143,42 @@ class SongsDtlPageState extends State<SongsDtlPage> {
                       //       ),
                     ),
                     Positioned(
-                      bottom: 10,
+                      top: 30,
+                      bottom: 0,
                       left: 0,
                       right: 0, // 确保从左到右的布局可以居中
                       child: Align(
-                        alignment: Alignment.center, // 设置内容水平居中
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min, // 设置 Column 高度为内容最小高度
-                          children: [
-                            Text(
-                              dissname,
-                              style: const TextStyle(
-                                  color: Colors.amber, fontSize: 20),
+                          alignment: Alignment.center, // 设置内容水平居中
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              maxHeight: 180, // 设置最大高度
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, right: 20), // 设置外边距
-                              width: double.infinity,
-                              height: 30,
-                              child: Marquee(
-                                text: desc,
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.amber),
-                                blankSpace: 0, // 跑马灯前后留白
-                                velocity: 10, // 滚动速度
-                                pauseAfterRound:
-                                    const Duration(seconds: 2), // 滚动停止时间
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            padding: const EdgeInsets.only(
+                                top: 16, right: 20, bottom: 20, left: 20),
+                            color: const Color.fromARGB(120, 0, 0, 0),
+                            child: SingleChildScrollView(
+                                child: Column(
+                              mainAxisSize:
+                                  MainAxisSize.min, // 设置 Column 高度为内容最小高度
+                              children: [
+                                Text(
+                                  dissname,
+                                  style: const TextStyle(
+                                      color: Colors.amber, fontSize: 20),
+                                ),
+                                Container(
+                                    margin:
+                                        const EdgeInsets.only(top: 10), // 设置外边距
+                                    width: double.infinity,
+                                    // height: 30,
+                                    child: HtmlWidget(
+                                      desc,
+                                      textStyle: const TextStyle(
+                                          fontSize: 14, color: Colors.white),
+                                    )),
+                              ],
+                            )),
+                          )),
                     ),
                   ],
                 ),
@@ -178,6 +187,7 @@ class SongsDtlPageState extends State<SongsDtlPage> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
+                  // 显示加载状态的占位符
                   final item = _items[index]; // 获取数组中的元素
                   return ListTile(
                     // leading: CircleAvatar(
@@ -193,7 +203,7 @@ class SongsDtlPageState extends State<SongsDtlPage> {
                     },
                   );
                 },
-                childCount: _items.isNotEmpty ? 20 : 0, // 遍历数组的长度
+                childCount: _items.isNotEmpty ? _items.length : 0, // 遍历数组的长度
               ),
             ),
           ],

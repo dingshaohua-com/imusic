@@ -89,7 +89,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
       body: Stack(
         children: [
           widget.navigationShell,
-          const PlayerBall(), // 悬浮播放小球
+          // const PlayerBall(), // 悬浮播放小球
         ],
       ),
       bottomNavigationBar: AnimatedBuilder(
