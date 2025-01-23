@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:imusic/api/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../api/qqmusic.dart';
 import '../store/player_state_notifier.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TopPage extends StatefulWidget {
+  const TopPage({super.key});
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<TopPage> {
 
   late List<dynamic> topGroup; // 用于保存请求结果
 
@@ -22,7 +22,7 @@ class HomePageState extends State<HomePage> {
 
   // 异步 HTTP 请求方法
   void loadData() async {
-    var res = await getHotMusic();
+    var res = await getRanks(0);
     setState(() {
       topGroup = res;
     });
@@ -43,10 +43,10 @@ class HomePageState extends State<HomePage> {
             final item = topGroup[index]; // 获取数组中的元素
             return ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(item['pic']!), // 图片加载
+                  backgroundImage: NetworkImage(item['cover']!), // 图片加载
                 ),
                 title: Text(item['title']), // 显示 name 字段
-                subtitle: Text(item['author']),
+                subtitle: Text(item['singerName']),
                 onTap: () {
                   onTap(item, ref);
                 });

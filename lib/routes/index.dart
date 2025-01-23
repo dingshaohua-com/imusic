@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import '../components/scaffold_bar.dart';
-import 'package:imusic/pages/home.dart';
+import 'package:imusic/pages/top.dart';
 import 'package:imusic/pages/about.dart';
 import 'package:imusic/pages/songs.dart';
 import 'package:imusic/pages/songs_dtl.dart';
@@ -13,7 +13,7 @@ final GoRouter router = GoRouter(
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // 判断是否需要显示底部导航栏
-        List<String> paths = ['/songs', '/home', '/about'];
+        List<String> paths = ['/songs', '/top', '/about'];
         bool showNavBar =
             paths.any((path) => state.uri.path == path.toString());
         return ScaffoldWithNavBar(
@@ -41,7 +41,7 @@ final GoRouter router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-                path: '/home', builder: (context, state) => const HomePage()),
+                path: '/top', builder: (context, state) => const TopPage()),
           ],
         ),
         StatefulShellBranch(
