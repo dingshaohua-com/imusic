@@ -47,5 +47,5 @@ getRanks(int page) async {
   final res = await dio.get(url, queryParameters: {'page': page});
   print(1111111);
   print(res);
-  return res.data['data']['song'];
+  return res.data['data'];
 }
