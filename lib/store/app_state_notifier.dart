@@ -1,7 +1,6 @@
 // PlayerStateNotifier 用于更新 PlayerState
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imusic/model/player_state.dart';
-import 'package:imusic/api/index.dart';
 import 'package:imusic/utils/player.dart';
 
 import '../model/app_state.dart';

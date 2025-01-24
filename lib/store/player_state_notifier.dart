@@ -1,8 +1,9 @@
 // PlayerStateNotifier 用于更新 PlayerState
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imusic/model/player_state.dart';
-import 'package:imusic/api/index.dart';
 import 'package:imusic/utils/player.dart';
+
+import '../api/qqmusic.dart';
 
 var player = Player.getInstance();
 
@@ -33,9 +34,10 @@ class PlayerStateNotifier extends StateNotifier<PlayerState> {
 
   // 播放歌曲
   void play(String musicId) async {
-    final song = await getMusic(musicId);
+    final song = await getSongInfo(musicId);
+    print('song');
+    print(song);
     var duration = await Player.audioPlayer.getDuration();
-
     var playStatus = await player.play(song['musicUrl']);
     if (playStatus) {
       state = state.copyWith(

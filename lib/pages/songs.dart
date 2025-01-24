@@ -31,7 +31,7 @@ class SongsPageState extends State<SongsPage> {
 
   initHandler() async {
     final String? songsCacheString = await asyncPrefs.getString('songs');
-    if (songsCacheString!=null) {
+    if (songsCacheString != null) {
       // 如果有缓存 则第一页走缓存，减少用户等待时长，下拉刷新再让他更新
       List<dynamic> songsCache = jsonDecode(songsCacheString);
       setState(() {
@@ -101,11 +101,8 @@ class SongsPageState extends State<SongsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(0), // 设置AppBar的最小高度
-          // Size.fromHeight(10), // 设置AppBar的高度为100
-          child: AppBar(
-              // title: Text('自定义AppBar高度'),
-              ),
+          preferredSize: const Size.fromHeight(0),
+          child: AppBar(),
         ),
         body: RefreshIndicator(
           onRefresh: _refreshData,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../api/qqmusic.dart';
@@ -26,12 +27,12 @@ class HomePageState extends State<TopPage> {
   }
 
   initHandler() async {
-    final String? songsCacheString = await asyncPrefs.getString('top');
-    if (songsCacheString != null) {
+    final String? topCacheString = await asyncPrefs.getString('top');
+    if (topCacheString != null) {
       // 如果有缓存 则第一页走缓存，减少用户等待时长，下拉刷新再让他更新
-      List<dynamic> songsCache = jsonDecode(songsCacheString);
+      List<dynamic> topCache = jsonDecode(topCacheString);
       setState(() {
-        _items.addAll(songsCache);
+        _items.addAll(topCache);
       });
     } else {
       _loadInitialData(); // 初始加载数据
@@ -95,42 +96,55 @@ class HomePageState extends State<TopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:  const Size.fromHeight(0), // 设置AppBar的最小高度
-        child: AppBar(
-          // title: Text('自定义AppBar高度'),
+    return Consumer(builder: (context, ref, child) {
+      return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(0), // 设置AppBar的最小高度
+          child: AppBar(
+              // title: Text('自定义AppBar高度'),
+              ),
         ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: _items.length , // 包含加载指示器
-          itemBuilder: (context, index) {
-            final item = _items[index];
-            if (index == _items.length) {
-              // 底部加载指示器
-              return _isLoadingMore
-                  ? const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : const SizedBox.shrink();
-            }
-            return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(item['cover']!), // 图片加载
-                ),
-                title: Text(item['title']), // 显示 name 字段
-                subtitle: Text(item['singerName']),
-                onTap: () {
-                  onTap(item, null);
-                });
-          },
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: _items.length, // 包含加载指示器
+            itemBuilder: (context, index) {
+              final item = _items[index];
+              if (index == _items.length) {
+                // 底部加载指示器
+                return _isLoadingMore
+                    ? const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    : const SizedBox.shrink();
+              }
+
+              return ListTile(
+                  // leading: CircleAvatar(
+                  //   backgroundImage: NetworkImage(item['cover']!), // 图片加载
+                  // ),
+                  leading: CachedNetworkImage(
+                    imageUrl: item['cover'] ?? '',
+                    imageBuilder: (context, imageProvider) {
+                      return CircleAvatar(
+                        backgroundImage: imageProvider,
+                      );
+                    },
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  title: Text(item['title']), // 显示 name 字段
+                  subtitle: Text(item['singerName']),
+                  onTap: () {
+                    onTap(item, ref);
+                  });
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   // @override
