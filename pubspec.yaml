@@ -40,18 +40,18 @@ dependencies:
   marquee: ^2.3.0 #text 跑马灯
   fluttertoast: ^8.2.10 # 原生Toast
   go_router: ^14.6.3 # 路由器
-  flutter_launcher_icons: ^0.14.3 # 启动图
+#  flutter_launcher_icons: ^0.14.3 # 启动图
   cached_network_image: ^3.4.1 # 网络图片缓存
   shared_preferences: ^2.3.5 # 本地存储
 #  flutter_html: ^3.0.0-beta.2 # 富文本
   flutter_widget_from_html_core: ^0.15.2 # 富文本
 
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/img/ic_launch.png"
-  adaptive_icon_background: "#FF2F56"
-  adaptive_icon_foreground: "assets/img/ic_launch.png"
+#flutter_launcher_icons:
+#  android: true
+#  ios: true
+#  image_path: "assets/img/ic_launch.png"
+#  adaptive_icon_background: "#FF2F56"
+#  adaptive_icon_foreground: "assets/img/ic_launch.png"
 
 dev_dependencies:
   flutter_test:
