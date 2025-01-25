@@ -65,11 +65,20 @@ class PlayerBall extends ConsumerWidget {
                           ), // Round all corners with a radius of 16
                         ),
                         child: Row(children: [
-                          playerState.coverUrl.isEmpty
-                              ? SvgPicture.asset('assets/img/music.svg',
-                                  width: 30, height: 30)
-                              : Image.network(playerState.coverUrl,
-                                  width: 30, height: 30),
+                          InkWell(
+                              onTap: () {
+                                print(123456);
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (buildContext) =>
+                                        const PlayerFull());
+                              },
+                              child: playerState.coverUrl.isEmpty
+                                  ? SvgPicture.asset('assets/img/music.svg',
+                                      width: 30, height: 30)
+                                  : Image.network(playerState.coverUrl,
+                                      width: 30, height: 30)),
                           // 按比例分配剩余空间的元素
                           Flexible(
                             flex: 1, // 占剩余空间的1份
