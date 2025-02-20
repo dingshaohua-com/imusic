@@ -1,20 +1,10 @@
 # imusic
 
-A new Flutter project.
+基于 flutter 开发的音乐播放器，支持 ios 和 android。
 
-## Getting Started
+## 关于接口
+一开始找的网上的，后来觉得不太好用，就自己写了一个，基于koa2 编写，[具体看这里](https://qmusic.dingshaohua.com)！
 
-This project is a starting point for a Flutter application.
+## 预览效果
+<video src="https://github.com/dingshaohua-com/imusic/blob/main/preview/preview.mp4?raw=true" controls></video>
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-Execution failed for task ':path_provider_android:compileDebugJavaWithJavac'.
-https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812
